@@ -1,6 +1,5 @@
 #include "s21_string.h"
 
-
 //| 1 | void *memchr(const void *str, int c, size_t n) | Выполняет поиск первого вхождения символа c (беззнаковый тип) в
 //первых n байтах строки, на которую указывает аргумент str. |
 //| 2 | int memcmp(const void *str1, const void *str2, size_t n) | Сравнивает первые n байтов str1 и str2. |
@@ -27,9 +26,8 @@
 //завершающий нулевой символ), которая появляется в строке haystack. |
 //| 15 | char *strtok(char *str, const char *delim) | Разбивает строку str на ряд токенов, разделенных delim. |
 
-
-size_t
-s21_strlen(const char *str) {
+s21_size_t
+s21_strlen(const char* str) {
   s21_size_t len = 0;
   if (str != S21_NULL) {
     while (*str++) {
