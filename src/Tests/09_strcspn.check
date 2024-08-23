@@ -1,0 +1,39 @@
+#suite s21_strcspn_suite
+
+#tcase case_s21_strcspn
+#test strcspn_standard_case
+// когда обе строки содержат символы, и в первой строке есть символы, не входящие во вторую строку.
+    char str1[] = "Hello, world!";
+    char str2[] = "x!";
+    ck_assert_uint_eq(s21_strcspn(str1, str2), 12); // Перед '!' в str1 12 символов, не считая начальные "Hello, worl"
+
+#test strcspn_empty_first_string
+//  когда первая строка пуста, функция должна возвращать 0.
+    char str1[] = "";
+    char str2[] = "abc";
+    ck_assert_uint_eq(s21_strcspn(str1, str2), 0);
+
+#test strcspn_empty_second_string
+// когда вторая строка пуста, функция должна возвращать длину первой строки, так как ни один символ не может быть найден.
+    char str1[] = "abc";
+    char str2[] = "";
+    ck_assert_uint_eq(s21_strcspn(str1, str2), 3); // Длина str1 - 3 символа
+
+#test strcspn_no_matching_chars
+// когда нет общих символов между двумя строками, функция должна возвращать длину первой строки.
+    char str1[] = "hello";
+    char str2[] = "xyz";
+    ck_assert_uint_eq(s21_strcspn(str1, str2), 5); // В str1 5 символов, ни один не совпадает с str2
+
+#test strcspn_all_chars_match_from_start
+// когда первый символ первой строки совпадает с одним из символов второй строки, функция должна возвращать 0.
+    char str1[] = "abc";
+    char str2[] = "a";
+    ck_assert_uint_eq(s21_strcspn(str1, str2), 0); // Совпадение с первым символом
+
+#test strcspn_second_string_fully_contained
+// проверить, правильно ли функция считает количество символов до первого совпадения.
+    char str1[] = "abcdef";
+    char str2[] = "bc";
+    ck_assert_uint_eq(s21_strcspn(str1, str2), 1); // 'b' - второй символ в str1
+

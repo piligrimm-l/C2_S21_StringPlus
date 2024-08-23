@@ -1,0 +1,56 @@
+#suite s21_sprintf_f_suite
+
+#tcase case_s21_sprintf_f
+#test sprintf_positive_float
+    char buffer[4096];
+    char expected[4096];
+    float num = 123.456;
+    sprintf(expected, "%f", num);
+    s21_sprintf(buffer, "%f", num);
+    ck_assert_str_eq(buffer, expected);
+
+#test sprintf_negative_float
+    char buffer[4096];
+    char expected[4096];
+    float num = -123.456;
+    int result_org = sprintf(expected, "%f", num);
+    int result_my = s21_sprintf(buffer, "%f", num);
+    ck_assert_str_eq(buffer, expected);
+    ck_assert_int_eq(result_my, result_org);
+
+#test sprintf_float_precision
+// Проверка вывода с различной точностью
+    char buffer[4096], expected[4096];
+    float num = 123.456;
+    int result_org = sprintf(expected, "%.2f", num);
+    int result_my = s21_sprintf(buffer, "%.2f", num);
+    ck_assert_str_eq(buffer, expected);
+    ck_assert_int_eq(result_my, result_org);
+
+#test sprintf_float_precision_minus
+    char buffer[4096];
+    char expected[4096];
+    float num = -123.456;
+    float result_org = sprintf(expected, "%.2f", num);
+    float result_my = s21_sprintf(buffer, "%.2f", num);
+    //ck_assert_float_eq(buffer, expected);
+    ck_assert_float_eq(result_my, result_org);
+
+#test sprinf_float_zero
+    char buffer[4096];
+    char expected[4096];
+    float num = 0;
+    int result_org = sprintf(expected, "%.2f", num);
+    int result_my = s21_sprintf(buffer, "%.2f", num);
+    ck_assert_str_eq(buffer, expected);
+    ck_assert_int_eq(result_my, result_org);
+
+#test test_sprintf_f_4f
+    float num = 123.29997;
+    char buffer[4096];
+    char expected[4096];
+    sprintf(expected, "Number: %.4f", num);
+    s21_sprintf(buffer, "Number: %.4f", num);
+    ck_assert_str_eq(buffer, expected);
+
+

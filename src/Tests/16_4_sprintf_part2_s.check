@@ -1,0 +1,62 @@
+#suite s21_sprintf_s_suite
+
+#tcase case_s21_sprintf_s
+#test sprintf_positive_s
+    char buffer[4096];
+    char expected[4096];
+    char *text = "Hello";
+    int original = sprintf(expected, "%s", text);
+    int result = s21_sprintf(buffer, "%s", text);
+    ck_assert_str_eq(buffer, expected);
+    ck_assert_int_eq(result, original);
+
+#test sprintf_positive_s_zero
+    char buffer[4096];
+    char expected[4096];
+    char *text = "";
+    int original = sprintf(expected, "%s", text);
+    int result = s21_sprintf(buffer, "%s", text);
+    ck_assert_str_eq(buffer, expected);
+    ck_assert_int_eq(result, original);
+
+#test sprintf_string_s_width_greater
+//Вывод строки с шириной больше длины строки
+    char buffer[4096];
+    char expected[4096];
+    char *text = "Hello";
+    sprintf(expected, "%10s", text); 
+    s21_sprintf(buffer, "%10s", text);
+    ck_assert_str_eq(buffer, expected);
+
+#test sprintf_string_s_width_less
+//Вывод строки с шириной меньше длины строки
+    char buffer[4096];
+    char expected[4096];
+    char *text = "Hello, World!";
+    sprintf(expected, "%.5s", text); //
+    s21_sprintf(buffer, "%.5s", text);
+    ck_assert_str_eq(buffer, expected);
+
+#test sprintf_s_flag_zero
+// Проверка флага 0 для строки
+    char buffer[4096];
+    char *text = "Hello";
+    s21_sprintf(buffer, "%0s", text);
+    ck_assert_str_eq(buffer, "Hello");
+
+#test sprintf_s_flag_space
+// Проверка флага пробела для строки
+    char buffer[4096];
+    char *text = "Hello";
+    s21_sprintf(buffer, "% s", text);
+    ck_assert_str_eq(buffer, "Hello");
+
+#test sprintf_empty_string
+    char buffer[4096];
+    char expected[4096];
+    char *str = "";
+    int result= s21_sprintf(buffer, "%s", str);
+    int original = sprintf(expected, "%s", str);
+    ck_assert_int_eq(result, original);
+
+

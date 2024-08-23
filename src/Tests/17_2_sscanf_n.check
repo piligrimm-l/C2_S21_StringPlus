@@ -1,0 +1,68 @@
+#suite s21_sscanf_n_suite
+
+#tcase case_s21_sscanf_n
+#test s21_sscanf_d_n
+    char format[] = "%d %d %n";
+    char str[] = "123 125";
+    char format2[] = "%d %d %n";
+    char str2[] = "123 125";
+    float p1, p2;
+    float q1, q2;
+    int n1, n2;
+    int res1 = s21_sscanf(str, format, &p1, &q1, &n1);
+    int res2 = sscanf(str2, format2, &p2, &q2, &n2);
+    ck_assert_int_eq(res1, res2);
+    ck_assert_int_eq(p1, p2);
+    ck_assert_int_eq(q1, q2);
+    ck_assert_int_eq(n1, n2);
+
+#test s21_sscanf_d_n_2
+    char str[] = "12345, world!";
+    char format[] = "%d%n";
+    int n = -1;
+    char buffer[4096] = {0};
+    char expected[4096] = {0};
+    int result = s21_sscanf(str, format, buffer, &n);
+    int original_result = sscanf(str, format, expected, &n);
+//    printf("Result: %d\n", result);
+//    printf("Original Result: %d\n", original_result);
+//    printf("n: %d\n", n);
+//    printf("Buffer: %s\n", buffer);
+//    printf("Expected: %s\n", expected);
+    ck_assert_int_eq(result, original_result);
+    ck_assert_int_eq(n, 5); 
+    ck_assert_str_eq(buffer, expected);
+
+#test sscanf_n_multiple_specifiers
+    char str[] = "123 45";
+    char format[] = "%d%n %d";
+    int n = -1;
+    int num1 = -1, num2 = -1;
+    int result = s21_sscanf(str, format, &num1, &n, &num2);
+    int original_result = sscanf(str, format, &num1, &n, &num2);
+    ck_assert_int_eq(result, original_result);
+    ck_assert_int_eq(n, 3); 
+    ck_assert_int_eq(num1, 123);
+    ck_assert_int_eq(num2, 45);
+
+#test sscanf_n_no_specifiers
+    char str[] = "Hello, world!";
+    char format[] = "Hello, world!";
+    int n = -1;
+    char buffer[4096] = {0};
+    int result = s21_sscanf(str, format, buffer, &n);
+    int original_result = sscanf(str, format, buffer, &n);
+    ck_assert_int_eq(result, original_result);
+    ck_assert_int_eq(n, -1);
+    ck_assert_str_eq(buffer, "");
+
+#test sscanf_n_1
+    int n1 = 0, n2 = 5;
+    char str[STR_SIZE] = "50 60 70 80";
+    char format[STR_SIZE] = "%n";
+    int res1 = s21_sscanf(str, format, &n1);
+    int res2 = sscanf(str, format, &n2);
+    ck_assert_int_eq(res1, res2);
+    ck_assert_int_eq(n1, n2);
+
+

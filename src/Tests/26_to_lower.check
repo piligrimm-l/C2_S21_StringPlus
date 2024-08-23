@@ -1,0 +1,116 @@
+#suite s21_to_lower
+
+#tcase case_s21_to_lower
+#test to_lower_all_uppercase
+  char str1[] = "ABC";
+  char *str2 = s21_to_lower(str1);
+  ck_assert_str_eq(str2, "abc");
+
+#test to_lower_mixed_case
+  char str1[] = "aBc";
+  char *str2 = s21_to_lower(str1);
+  ck_assert_str_eq(str2, "abc");
+
+#test to_lower_last_char_upper
+  char str1[] = "abC";
+  char *str2 = s21_to_lower(str1);
+  ck_assert_str_eq(str2, "abc");
+
+
+#test to_lower_already_lowe
+  char str1[] = "ABC";
+  char *str2 = s21_to_lower(str1);
+  ck_assert_str_eq(str2, "abc");
+
+#test to_lower_numbers
+// цифры ("123"), для подтверждения, что функция не изменяет не-буквенные символы.
+  char str1[] = "123";
+  char *str2 = s21_to_lower(str1);
+  ck_assert_str_eq(str2, "123");
+
+#test to_lower_numbers_and_upper
+  char str1[] = "123ABC";
+  char *str2 = s21_to_lower(str1);
+  ck_assert_str_eq(str2, "123abc");
+
+#test to_lower_repeating_chars
+  char str1[] = "aBaBc";
+  char *str2 = s21_to_lower(str1);
+  ck_assert_str_eq(str2, "ababc");
+
+#test to_lower_special_chars
+// что специальные символы и знаки пунктуации остаются неизменными.
+  char str1[] = ".,/.,/.,";
+  char *str2 = s21_to_lower(str1);
+  ck_assert_str_eq(str2, ".,/.,/.,");
+
+#test to_lower_numbers_prefix
+  char str1[] = "09876ABC";
+  char *str2 = s21_to_lower(str1);
+  ck_assert_str_eq(str2, "09876abc");
+
+#test to_lower_numbers_suffix
+  char str1[] = "ABC123";
+  char *str2 = s21_to_lower(str1);
+  ck_assert_str_eq(str2, "abc123");
+
+#test to_lower_space
+  char str1[] = " ";
+  char *str2 = s21_to_lower(str1);
+  ck_assert_str_eq(str2, " ");
+
+#test to_lower_empty
+  char str1[] = "";
+  char *str2 = s21_to_lower(str1);
+  ck_assert_str_eq(str2, "");
+
+#test to_lower_alphanumeric
+  char str1[] = "A1A1A1";
+  char *str2 = s21_to_lower(str1);
+  ck_assert_str_eq(str2, "a1a1a1");
+
+#test to_lower_space_prefix
+  char str1[] = " A1A1A1";
+  char *str2 = s21_to_lower(str1);
+  ck_assert_str_eq(str2, " a1a1a1");
+
+#test to_lower_space_suffix
+  char str1[] = "A1A1A1 ";
+  char *str2 = s21_to_lower(str1);
+  ck_assert_str_eq(str2, "a1a1a1 ");
+
+#test to_lower_double_alphanumeric
+  char str1[] = "AA1A1A1";
+  char *str2 = s21_to_lower(str1);
+  ck_assert_str_eq(str2, "aa1a1a1");
+
+#test to_lower_mixed_with_numbers
+  char str1[] = "A1a1A1A";
+  char *str2 = s21_to_lower(str1);
+  ck_assert_str_eq(str2, "a1a1a1a");
+
+#test to_lower_null_char
+// нулевые символы (\0)
+  char str1[] = "A1A1\0a1";
+  char *str2 = s21_to_lower(str1);
+  ck_assert_str_eq(str2, "a1a1\0a1");
+
+#test to_lower_newline_char
+//тсодержащими символы новой строки (\n) 
+  char str1[] = "A1a\n1A1";
+  char *str2 = s21_to_lower(str1);
+  ck_assert_str_eq(str2, "a1a\n1a1");
+
+#test to_lower_full_alphabet
+  char str1[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+  char *str2 = s21_to_lower(str1);
+  ck_assert_str_eq(str2, "abcdefghijklmnopqrstuvwxyz");
+
+#test to_lower_long_string
+  char str1[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+                "ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ";
+  char *str2 = s21_to_lower(str1);
+  ck_assert_str_eq(str2, "abcdefghijklmnopqrstuvwxyz"
+                          "abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz");
+
+

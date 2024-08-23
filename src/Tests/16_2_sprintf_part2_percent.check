@@ -1,0 +1,36 @@
+#suite s21_sprintf_percent_suite
+
+#tcase case_s21_sprintf_percent
+#test sprintf_percent_sign
+// Проверка вывода символа '%'
+    char buffer[4096];
+    char expected[4096];
+    s21_sprintf(buffer, "%%");
+    sprintf(expected, "%%");
+    ck_assert_str_eq(buffer, expected);
+
+#test sprintf_percent_sign_with_text
+// Проверка вывода символа '%' перед текстом
+    char buffer[4096];
+    char expected[4096];
+    s21_sprintf(buffer, "100%% satisfaction");
+    sprintf(expected, "100%% satisfaction");
+    ck_assert_str_eq(buffer, expected);
+
+#test sprintf_percent_sign_at_end
+// Проверка вывода символа '%' в конце строки
+    char buffer[4096];
+    char expected[4096];
+    s21_sprintf(buffer, "Don't forget to save 10%%");
+    sprintf(expected, "Don't forget to save 10%%");
+    ck_assert_str_eq(buffer, expected);
+
+#test sprintf_percent_sign_among_other_formats
+// Проверка вывода символа '%' среди других форматов
+    char buffer[4096];
+    char expected[4096];
+    s21_sprintf(buffer, "You have completed %.2f%% of the task", 75.5);
+    sprintf(expected, "You have completed %.2f%% of the task", 75.5);
+    ck_assert_str_eq(buffer, expected);
+
+    

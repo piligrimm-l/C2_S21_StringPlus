@@ -1,0 +1,141 @@
+#suite s21_sprintf_d_suite
+
+#tcase case_s21_sprintf_d
+#test sprintf_d_int
+    char buffer[4096];
+    int num = 12345;
+    int result = s21_sprintf(buffer, "%d", num);
+    char expected[4096];
+    int orgignal = sprintf(expected, "%d", num);
+    ck_assert_int_eq(result, orgignal);
+
+#test sprintf_d_int_negative
+    char buffer[4096];
+    char expected[4096];
+    int num = -12345;
+    sprintf(expected, "%d", num);
+    int printed = s21_sprintf(buffer, "%d", num);
+    ck_assert_str_eq(buffer, expected);
+    ck_assert_int_eq(printed, 6);
+
+#test sprintf_d_zero
+    char buffer[4096];
+    char expected[4096];
+    int num = 0;
+    sprintf(expected, "%d", num);
+    int printed = s21_sprintf(buffer, "%d", num);
+    ck_assert_str_eq(buffer, expected);
+    ck_assert_int_eq(printed, 1);
+
+#test sprintf_d_whitde
+//шириной
+    char buffer[4096];
+    char expected[4096];
+    int num = 123;
+    sprintf(expected, "%10d", num);
+    s21_sprintf(buffer, "%10d", num);
+    ck_assert_str_eq(buffer, expected);
+
+#test sprintf_d_flag_minus_1
+// флаг - (выравнивание по левому краю):
+    char buffer[4096];
+    char expected[4096];
+    int num = 123;
+    sprintf(expected, "%-10d", num);
+    s21_sprintf(buffer, "%-10d", num);
+    ck_assert_str_eq(buffer, expected);
+
+#test sprintf_d_flag_minus_2
+    char buffer[4096];
+    char expected[4096];
+    s21_sprintf(buffer, "%-10d", -10);
+    sprintf(expected, "%-10d", -10);
+    ck_assert_str_eq(buffer, expected);
+
+#test sprintf_d_flag_plus_1
+// флаг + к положительному
+    char buffer[4096];
+    char expected[4096];
+    int num = 123;
+    sprintf(expected, "%+d", num);
+    s21_sprintf(buffer, "%+d", num);
+    ck_assert_str_eq(buffer, expected);
+
+#test sprintf_d_flag_plus_2
+    char buffer[4096];
+    char expected[4096];
+    s21_sprintf(buffer, "%+d", -10);
+    sprintf(expected, "%+d", -10);
+    ck_assert_str_eq(buffer, expected);
+
+#test sprintf_d_width_star
+// Проверка использования символа "*" для указания ширины
+    char buffer[4096];
+    char expected[4096];
+    int num = 123;
+    s21_sprintf(buffer, "%*d", 10, num);     
+    sprintf(expected, "%*d", 10, num);
+    ck_assert_str_eq(buffer, expected);
+
+#test sprintf_d_precision_star
+// Проверка использования символа "*" для указания точности
+    char buffer[4096];
+    char expected[4096];
+    double num = 123.456;
+    s21_sprintf(buffer, "%.*f", 2, num); 
+    sprintf(expected, "%.*f", 2, num); 
+    ck_assert_str_eq(buffer, expected);
+
+#test sprintf_d_flag_zero
+// Проверка флага 0 для целого числа
+    char buffer[4096];
+    char expected[4096];
+    int num = 123;
+    s21_sprintf(buffer, "%0d", num);
+    sprintf(expected, "%0d", num);
+    ck_assert_str_eq(buffer, expected);
+
+#test sprintf_d_flag_space
+// Проверка флага пробела для целого числа
+    char buffer[4096];
+    char expected[4096];
+    int num = 123;
+    s21_sprintf(buffer, "% d", num);
+    sprintf(expected, "% d", num);
+    ck_assert_str_eq(buffer, expected);
+
+#test sprintf_negative_test
+    char buffer[4096];
+    int result = s21_sprintf(buffer, "%d", 123);
+    ck_assert_int_eq(result, 3);
+    
+#test sprintf_negative_spec
+    char buffer[4096];
+    char result = s21_sprintf(buffer, "%z", 123);
+    ck_assert_int_ne(result, -1);
+
+#test sprintf_invalid_format
+    char buffer[4096];
+    int result = s21_sprintf(buffer, NULL, "This should fail.");
+    ck_assert_int_eq(result, 0);
+    
+#test sscanf_d_h_flags
+    short int value_h = 1234;
+    char buffer[4096];
+    char expected[4096];
+    int result_h_d = s21_sprintf(buffer, "%hd", value_h);
+    sprintf(expected, "%hd", value_h);
+    // Проверка результата и совпадения строк
+    ck_assert_int_eq(result_h_d, strlen(expected));
+    ck_assert_str_eq(buffer, expected);
+    
+#test sscanf_d_l_flags
+    long int value_l = -123456;
+    char buffer[4096];
+    char expected[4096];
+    int result_l_d = s21_sprintf(buffer, "%ld", value_l);
+    sprintf(expected, "%ld", value_l);
+    ck_assert_int_eq(result_l_d, strlen(expected));
+    ck_assert_str_eq(buffer, expected);
+
+

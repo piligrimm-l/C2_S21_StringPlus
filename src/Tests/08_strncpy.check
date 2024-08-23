@@ -1,0 +1,82 @@
+#suite s21_strncpy_suite
+
+#tcase case_s21_strncpy
+#test strncpy_exact_length
+// Копирование определенного количества символов
+  char src[] = "Hello";
+  char dest[10] = {0};
+  s21_strncpy(dest, src, 5);
+ // printf("----------------%s\n-------------%s\n", s21_strncpy(dest, src, 5),  strncpy(dest, src, 5));
+  ck_assert_str_eq(dest, "Hello");
+
+#test strncpy_with_null_termination
+//добавлять нулевой символ в конец
+  char src[] = "Hello";
+  char dest[10] = {0};
+  s21_strncpy(dest, src, 3);
+  ck_assert_str_eq(dest, "Hel");
+
+#test strncpy_no_write_beyond
+// не записывает символы за пределы выделенной памяти целевой строки.
+  char src[] = "Hello";
+  char dest[4] = {0};
+  s21_strncpy(dest, src, 3);
+  ck_assert_str_eq(dest, "Hel"); // Убедиться, что нет переполнения
+
+#test strncpy_empty_string
+// корректная работа функции при копировании пустой строки
+  char src[] = "";
+  char dest[10];
+  s21_strncpy(dest, src, sizeof(dest));
+  ck_assert_str_eq(dest, "");
+
+#test strncpy_no_null_termination_if_exact
+// не добавляет нулевой символ в конец, если количество копируемых символов равно размеру целевой строки
+  char src[] = "Hello";
+  char dest[6];
+  s21_strncpy(dest, src, 5);
+  ck_assert_mem_eq(dest, "Hello", 5); // Проверка без предположения о нулевом символе
+
+#test strncpy_special_characters
+//специальные символы, включая пробелы и символы переноса строки.
+  char src[] = "Hello\nWorld";
+  char dest[12];
+  s21_strncpy(dest, src, sizeof(src));
+  ck_assert_str_eq(dest, "Hello\nWorld");
+
+#test strncpy_zero_length
+//обрабатывает случай, когда указано копировать 0 символов.
+  char src[] = "Hello";
+  char dest[10] = "Test";
+  s21_strncpy(dest, src, 0);
+  ck_assert_str_eq(dest, "Test"); 
+
+#test strncpy_less_than_length
+// меньше длины исходной строки, копируя только указанное количество символов и корректно переносит строку нулевым символом
+  char src[] = "Hello, world!";
+  char dest[10];
+  memset(dest, 'A', sizeof(dest)); // Инициализируем dest символами 'A' для проверки заполнения
+  s21_strncpy(dest, src, 5);
+// printf("Dest after strncpy: %s\n", dest);
+  dest[5] = '\0';
+  ck_assert_str_eq(dest, "Hello");
+  ck_assert_int_eq(dest[5], '\0');
+  for (int i = 6; i < (int)sizeof(dest); i++) {
+//  printf("Checking dest[%d] = %c\n", i, dest[i]);
+    ck_assert_int_eq(dest[i], 'A'); // Проверяем, что остальная часть dest не изменилась
+  }
+
+#test strncpy_more_than_length
+// больше длины исходной строки, копируя содержимое исходной строки и заполняя оставшуюся часть нулевыми символами
+ char src[] = "Hello";
+  char dest[10];
+  memset(dest, 'B', sizeof(dest)); // Инициализируем dest символами 'B' для проверки заполнения после копирования
+  s21_strncpy(dest, src, 9);
+//  printf("Dest after strncpy: %s\n", dest); 
+  ck_assert_str_eq(dest, "Hello"); // Проверяем, что скопировались все символы src, включая терминирующий нулевой символ
+  for (int i = 5; i < 9; i++) {
+//  printf("Checking dest[%d] = %c\n", i, dest[i]);
+    ck_assert_int_eq(dest[i], '\0'); // Убеждаемся, что оставшаяся часть до n заполняется нулевыми символами
+  }
+  ck_assert_int_eq(dest[9], 'B'); // Убеждаемся, что символы за пределами n не изменены
+

@@ -1,0 +1,42 @@
+#suite s21_strpbrk_suite
+
+#tcase case_s21_strpbrk
+#test strpbrk_found
+// Тест на нахождение первого вхождения одного из символов str2 в str1
+  const char *str1 = "Example string";
+  const char *str2 = "xyzs";
+  char *result = s21_strpbrk(str1, str2);
+  ck_assert_ptr_nonnull(result);
+  ck_assert_ptr_eq(result, strpbrk(str1, str2));
+  ck_assert_int_eq(*result, 'x');
+
+#test strpbrk_not_found
+// Тест, когда символы из str2 не найдены в str1
+  const char *str1 = "Hello, world!";
+  const char *str2 = "xyz";
+  char *result = s21_strpbrk(str1, str2);
+  ck_assert_ptr_null(result);
+
+#test strpbrk_empty_str1
+// Тест с пустой строкой str1
+  const char *str1 = "";
+  const char *str2 = "abc";
+  char *result = s21_strpbrk(str1, str2);
+  ck_assert_ptr_null(result);
+
+#test strpbrk_empty_str2
+// Тест с пустой строкой str2
+  const char *str1 = "Hello";
+  const char *str2 = "";
+  char *result = s21_strpbrk(str1, str2);
+  ck_assert_ptr_null(result);
+
+#test strpbrk_long_str2
+// Тест на нахождение первого вхождения символа из str2, когда str2 длиннее str1
+  const char *str1 = "abc";
+  const char *str2 = "abcdefghijklmnopqrstuvwxyz";
+  char *result = s21_strpbrk(str1, str2);
+  ck_assert_ptr_nonnull(result);
+  ck_assert_ptr_eq(result, strpbrk(str1, str2));
+  ck_assert_int_eq(*result, 'a');
+

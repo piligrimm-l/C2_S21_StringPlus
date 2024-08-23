@@ -1,0 +1,42 @@
+#suite s21_strncmp_suite
+
+#tcase case_s21_strncmp
+#test strncmp_full_equal
+// Тест на полное сравнение идентичных строк
+  const char *str1 = "abcdef";
+  const char *str2 = "abcdef";
+  ck_assert_int_eq(s21_strncmp(str1, str2, strlen(str1)), 0);
+
+#test strncmp_partial_equal
+// Тест на частичное сравнение идентичных строк
+  const char *str1 = "abcdef";
+  const char *str2 = "abcdef";
+  ck_assert_int_eq(s21_strncmp(str1, str2, 3), 0);  
+  // Сравниваем только первые 3 символа
+
+#test strncmp_zero_length
+// Тест на сравнение с длиной n равной 0
+  const char *str1 = "abcdef";
+  const char *str2 = "xyz";
+  ck_assert_int_eq(s21_strncmp(str1, str2, 0), 0);  
+  // Сравнение с n=0 должно всегда возвращать 0
+
+#test strncmp_length_exceeds
+// Тест на сравнение строк, когда n больше длины строк
+  const char *str1 = "abc";
+  const char *str2 = "abc";
+  ck_assert_int_eq(s21_strncmp(str1, str2, 10), 0);  
+
+#test strncmp_diff_length
+// Тест на сравнение строк различной длины
+  const char *str1 = "abc";
+  const char *str2 = "abcd";
+  int result = s21_strncmp(str1, str2, strlen(str2));
+  ck_assert(result < 0);  // str1 короче str2, должно быть < 0
+
+#test strncmp_empty_vs_nonempty
+// Тест на сравнение непустой строки с пустой при n=0
+  const char *str1 = "";
+  const char *str2 = "abc";
+  ck_assert_int_eq(s21_strncmp(str1, str2, 0), 0);  // Сравнение с n=0, ожидается 0
+

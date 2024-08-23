@@ -1,0 +1,38 @@
+#suite s21_strchr_suite
+
+#tcase case_s21_strchr
+#test strchr_start
+// Тест на нахождение символа в начале строки
+  char str[] = "Test string";
+  int ch = 'T';
+  char *result = s21_strchr(str, ch);
+  char *expected = strchr(str, ch);
+  ck_assert_ptr_eq(result, expected); 
+  ck_assert_str_eq(
+      result, expected);  
+
+#test strchr_middle
+// Тест на нахождение символа в середине строки
+  char str[] = "Example string";
+  int ch = 'm';
+  char *result = s21_strchr(str, ch);
+  char *expected = strchr(str, ch);
+  ck_assert_ptr_eq(result, expected);
+  ck_assert_str_eq(result, expected);
+
+#test strchr_not_found
+// Тест на отсутствие символа в строке
+  char str[] = "Another example";
+  int ch = 'z';
+  char *result = s21_strchr(str, ch);
+  ck_assert_ptr_eq(result, NULL);
+
+#test strchr_null_char
+// Тест на поиск нулевого символа (терминатор строки)
+  char str[] = "Null terminator test";
+  int ch = '\0';
+  char *result = s21_strchr(str, ch);
+  char *expected = strchr(str, ch);
+  ck_assert_ptr_eq(result, expected);
+  ck_assert_str_eq(result, expected);
+

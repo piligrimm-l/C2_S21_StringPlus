@@ -1,0 +1,45 @@
+#suite s21_strncat_suite
+
+#tcase case_s21_strncat
+#test strncat_basic_concat
+// Базовая объединением строк с ограниченной длиной
+  char dest1[50] = "Initial ";
+  //char dest2[50] = "Initial ";
+  const char src[] = "concatenation";
+  size_t n = 5;  
+  //char *result = 
+  s21_strncat(dest1, src, n);
+  //char *expected = strncat(dest2, src, n);
+  //printf("%s = %s\n", result, expected);
+  ck_assert_str_eq(dest1, "Initial conca");
+
+#test strncat_full_concat
+// Объединением строк
+  char dest[50] = "Full ";
+  const char src[] = "concatenation";
+  s21_strncat(dest, src, strlen(src)); 
+  ck_assert_str_eq(dest, "Full concatenation");
+
+#test strncat_empty_src
+  // Попытка объединением пустой строки
+  char dest[50] = "Empty source ";
+  const char src[] = "";
+  s21_strncat(dest, src, 5);  
+  ck_assert_str_eq(dest, "Empty source ");
+
+#test strncat_to_empty_dest
+// Объединением строки в пустую целевую строку
+  char dest[50] = "";
+  const char src[] = "Non-empty source";
+  s21_strncat(dest, src, strlen(src));  // Полная длина не пустого src
+  ck_assert_str_eq(dest, "Non-empty source");
+
+
+#test strncat_zero_length
+// Объединением строк нулевой длины
+  char dest[50] = "Zero length ";
+  const char src[] = "ignored";
+  s21_strncat(dest, src, 0);  
+  ck_assert_str_eq(dest, "Zero length ");
+
+

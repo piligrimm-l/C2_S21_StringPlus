@@ -1,0 +1,167 @@
+#suite s21_sscanf_suite
+
+#tcase case_s21_sscanf_d
+#test sscanf_basic_d
+    // Чтение целых чисел разного размера (%d, %ld)
+    char str_ints[] = "123 -456";
+    int num1;
+    long num2;
+    sscanf(str_ints, "%d %ld", &num1, &num2); 
+    int num1_custom;
+    long num2_custom;
+    s21_sscanf(str_ints, "%d %ld", &num1_custom, &num2_custom); 
+    ck_assert_int_eq(num1_custom, num1); 
+    ck_assert_int_eq(num2_custom, num2);
+
+#test sscanf__basic_floats
+    // Чтение чисел с плавающей точкой (%f, %Lf)
+    char str_floats[] = "123.45 -678.90 1234567.89";
+    float f1;
+    long double f3;
+    sscanf(str_floats, "%f %Lf", &f1, &f3); 
+    float f1_custom;
+    long double f3_custom;
+    s21_sscanf(str_floats, "%f %Lf", &f1_custom, &f3_custom); 
+    ck_assert_float_eq_tol(f1_custom, f1, 0.001); 
+//   ck_assert_double_eq_tol(f2_custom, f2, 0.001);
+    ck_assert_ldouble_eq_tol(f3_custom, f3, 0.001);
+
+#test sscanf_c_s_basic_characters
+// Чтение символов и строк (%c, %s)
+    char str_chars[] = "a bcd";
+    char c;
+    char str[4];
+    sscanf(str_chars, "%c %s", &c, str); 
+    char c_custom;
+    char str_custom[4];
+    s21_sscanf(str_chars, "%c %s", &c_custom, str_custom); 
+    ck_assert_int_eq(c_custom, c); 
+    ck_assert_str_eq(str_custom, str);
+
+#test sscanf_precision
+// Тестирование точности
+    char str_flags[] = "123.45 hello";
+    float num;
+    char str[11];
+    s21_sscanf(str_flags, "%f %5s", &num, str);
+    float num_original;
+    char str_original[11];
+    sscanf(str_flags, "%f %5s", &num_original, str_original);
+    ck_assert_float_eq_tol(num, num_original, 0.001);
+    ck_assert_str_eq(str, str_original);
+
+#test sscanf_short_int
+ // Чтение коротких целых чисел (%hd)
+    short int short_num;
+    char str_short[] = "32767";
+    s21_sscanf(str_short, "%hd", &short_num);
+    ck_assert_int_eq(short_num, 32767);
+
+#test sscanf_parse_hexadecimal
+// Test for parsing hexadecimal numbers
+    char hex_str[] = "0x1a3f";
+    unsigned int hex_val;
+    s21_sscanf(hex_str, "%x", &hex_val);
+    unsigned int hex_val_original;
+    sscanf(hex_str, "%x", &hex_val_original);
+    ck_assert_uint_eq(hex_val, hex_val_original);
+
+#test sscanf_parse_octal
+// Test for parsing octal numbers
+    char oct_str[] = "0754";
+    unsigned int oct_val;
+    s21_sscanf(oct_str, "%o", &oct_val);
+    unsigned int oct_val_original;
+    sscanf(oct_str, "%o", &oct_val_original);
+    ck_assert_uint_eq(oct_val, oct_val_original);
+
+#test sscanf_parse_integer
+    char int_str[] = "123 -456 00123 0x7B 0754";
+    int parsed_int1, parsed_int2, parsed_int3, parsed_int4, parsed_int5;
+    int parsed_int1_original, parsed_int2_original, parsed_int3_original, parsed_int4_original, parsed_int5_original;
+    s21_sscanf(int_str, "%i %i %i %i %i", &parsed_int1, &parsed_int2, &parsed_int3, &parsed_int4, &parsed_int5);
+    sscanf(int_str, "%i %i %i %i %i", &parsed_int1_original, &parsed_int2_original, &parsed_int3_original, &parsed_int4_original, &parsed_int5_original);
+    ck_assert_int_eq(parsed_int1, parsed_int1_original);
+    ck_assert_int_eq(parsed_int2, parsed_int2_original);
+    ck_assert_int_eq(parsed_int3, parsed_int3_original);
+    ck_assert_int_eq(parsed_int4, parsed_int4_original);
+    ck_assert_int_eq(parsed_int5, parsed_int5_original);
+
+// Чтение данных, используя комбинации спецификаторов, флагов, ширин, точностей и модификаторов для проверки их совместной работы.
+#test sscanf_skip_uninteresting
+    int interestingData;
+    char str[] = "123 ABC 456";
+    s21_sscanf(str, "%*d %*s %d", &interestingData);
+    ck_assert_int_eq(interestingData, 456);
+
+// Проверка корректной обработки ошибок в форматной строке и неправильного ввода.
+#tcase case_sscanf_errors
+#test sscanf_format_errors_malformed_format
+// "%z" намеренно некорректный 
+    char str[] = "100 abc";
+    int d;
+    char s[10];
+    int ret = s21_sscanf(str, "%z %s", &d, &s); 
+    ck_assert_int_eq(ret, 0);
+
+#test sscanf_format_errors_incorrect_type
+// ожидаемый первый тип данных - int, но ввод не является целым числом
+    char str[] = "abc 100";
+    int d;
+    int ret = s21_sscanf(str, "%d", &d);
+    ck_assert_int_eq(ret, 0);
+
+#test sscanf_format_errors_unmatched_input
+ // ожидается целое число, но вместо этого находится строка
+    char str[] = "abc def";
+    int d;
+    int ret = s21_sscanf(str, "%d", &d);
+    ck_assert_int_eq(ret, 0);
+
+#tcase case_sscanf_empty
+// Тестирование граничных условий
+#test sscanf_empty_string
+// Тестирование чтения из пустой строки
+    char empty_str[] = "";
+    int d;
+    float f;
+    char s[10];
+    int ret = s21_sscanf(empty_str, "%d %f %s", &d, &f, &s);
+    ck_assert_int_eq(ret, EOF);
+
+#test sscanf_only_spaces
+// Тестирование строки, содержащей только пробелы
+    int d;
+    float f;
+    char s[10];
+    char spaces_str[] = "    ";
+    int ret = s21_sscanf(spaces_str, "%d %f %s", &d, &f, s);
+    ck_assert_int_eq(ret, -1);
+
+#test sscanf_mismatched_format
+// Тестирование несоответствия формата ввода и строка формата
+    int d;
+    char mismatch_str[] = "abc 123";
+    int ret = s21_sscanf(mismatch_str, "%d", &d);
+    ck_assert_int_eq(ret, 0); 
+
+#test sscanf_overflow
+// Тестирование переполнения при чтении чисел
+    char overflow_str[] = "9999999999"; // Значение, превышающее int
+    int d;
+    int ret = s21_sscanf(overflow_str, "%d", &d);
+    ck_assert(ret == EOF || ret == 1);
+// valgrind fix
+
+#test sscanf_d_s_field_width  
+// Тестирование ширины поля
+    int original_num;
+    char original_str[12];
+    sscanf("123 hello", "%5d %10s", &original_num, original_str);
+    int num;
+    char str[12];
+    s21_sscanf("123 hello", "%5d %10s", &num, str);
+    ck_assert_int_eq(num, original_num);
+
+
+

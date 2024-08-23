@@ -1,0 +1,6 @@
+#main-post
+if (nf != 0) {
+      printf("Hey, something's wrong! %d whole tests failed!\n", nf);
+    }
+    return 0;
+    

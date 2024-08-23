@@ -1,0 +1,131 @@
+#suite s21_insert_suite
+
+#tcase case_s21_insert
+#test insert_append
+  char *str1 = "abc";
+  char *str2 = "def";
+  int n = 3;
+  char *str3 = s21_insert(str1, str2, n);
+  ck_assert_str_eq(str3, "abcdef");
+  free(str3);
+
+#test insert_mid_to_end
+  char *str1 = "abc";
+  char *str2 = "def";
+  int n = 2;
+  char *str3 = s21_insert(str1, str2, n);
+  ck_assert_str_eq(str3, "abdefc");
+  free(str3);
+
+#test insert_front_to_mid
+  char *str1 = "abc";
+  char *str2 = "def";
+  int n = 1;
+  char *str3 = s21_insert(str1, str2, n);
+  ck_assert_str_eq(str3, "adefbc");
+  free(str3);
+
+#test insert_prepend
+  char *str1 = "abc";
+  char *str2 = "def";
+  int n = 0;
+  char *str3 = s21_insert(str1, str2, n);
+  ck_assert_str_eq(str3, "defabc");
+  free(str3);
+
+#test insert_long_with_short
+  char *str1 = "abcdefghijkl123456789";
+  char *str2 = "xyz";
+  int n = 5;
+  char *str3 = s21_insert(str1, str2, n);
+  ck_assert_str_eq(str3, "abcdexyzfghijkl123456789");
+  free(str3);
+
+#test insert_empty_into_nonempty_start
+  char *str1 = "abc";
+  char *str2 = "";
+  int n = 0;
+  char *str3 = s21_insert(str1, str2, n);
+  ck_assert_str_eq(str3, "abc");
+  free(str3);
+
+#test insert_empty_into_nonempty_mid
+  char *str1 = "abc";
+  char *str2 = "";
+  int n = 1;
+  char *str3 = s21_insert(str1, str2, n);
+  ck_assert_str_eq(str3, "abc");
+  free(str3);
+
+#test insert_empty_into_nonempty_end
+  char *str1 = "abc";
+  char *str2 = "";
+  int n = 3;
+  char *str3 = s21_insert(str1, str2, n);
+  ck_assert_str_eq(str3, "abc");
+  free(str3);
+
+#test insert_nonempty_into_empty_invalid
+  char *str1 = "";
+  char *str2 = "abc";
+  int n = 1;
+  char *str3 = s21_insert(str1, str2, n);
+  ck_assert_pstr_eq(str3, S21_NULL);
+  free(str3);
+
+#test insert_nonempty_into_empty_start
+  char *str1 = "";
+  char *str2 = "abc";
+  int n = 0;
+  char *str3 = s21_insert(str1, str2, n);
+  ck_assert_str_eq(str3, "abc");
+  free(str3);
+
+#test insert_nonempty_into_empty_invalid_end
+  char *str1 = "";
+  char *str2 = "abc";
+  int n = 3;
+  char *str3 = s21_insert(str1, str2, n);
+  ck_assert_pstr_eq(str3, S21_NULL);
+  free(str3);
+
+#test insert_empty_into_empty_invalid
+  char *str1 = "";
+  char *str2 = "";
+  int n = 3;
+  char *str3 = s21_insert(str1, str2, n);
+  ck_assert_pstr_eq(str3, S21_NULL);
+  free(str3);
+
+#test insert_empty_into_empty_start
+  char *str1 = "";
+  char *str2 = "";
+  int n = 0;
+  char *str3 = s21_insert(str1, str2, n);
+  ck_assert_str_eq(str3, "");
+  free(str3);
+
+#test insert_special_newline
+  char *str1 = "Hello";
+  char *str2 = "World\n";
+  int n = 5;
+  char *str3 = s21_insert(str1, str2, n);
+  ck_assert_str_eq(str3, "HelloWorld\n");
+  free(str3);
+
+#test insert_special_tab
+  char *str1 = "Hello";
+  char *str2 = "\tWorld";
+  int n = 5;
+  char *str3 = s21_insert(str1, str2, n);
+  ck_assert_str_eq(str3, "Hello\tWorld");
+  free(str3);
+
+#test insert_special_chars
+  char *str1 = "abc";
+  char *str2 = "\n\t\\";
+  int n = 3;
+  char *str3 = s21_insert(str1, str2, n);
+  ck_assert_str_eq(str3, "abc\n\t\\");
+  free(str3);
+

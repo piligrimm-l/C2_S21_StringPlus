@@ -1,0 +1,39 @@
+#suite s21_memcmp_suite
+
+#tcase case_s21_memcmp
+#test memcmp_compare_start
+// Тест на сравнение начала строк
+  size_t n1 = 3;
+  char b1[1024] = "Hello,";
+  char b11[1024] = "Hello,";
+  char str_1_2[1024] = "Hello, World!";
+  ck_assert_int_eq(memcmp(b1, str_1_2, n1), s21_memcmp(b11, str_1_2, n1));
+
+#test memcmp_minimal_difference 
+// Тест на сравнение строк с одним различающимся символом
+  size_t n2 = 4;
+  char b2[1024] = "1234";
+  char str_2_2[1024] = "1235";
+  ck_assert_int_lt(s21_memcmp(b2, str_2_2, n2), 0);
+
+#test memcmp_identical_parts
+// Тест на сравнение одинаковых участков в строках
+  size_t n3 = 4;
+  char b3[1024] = "SB SB SB $! ";
+  char str_3_3[1024] = "SB SB SB $! ";
+  ck_assert_int_eq(memcmp(b3, b3 + 7, n3), s21_memcmp(str_3_3, str_3_3 + 7, n3));
+
+#test memcmp_case_sensitivity
+// Тест на сравнение строк с учётом регистра
+  size_t n4 = 6;
+  char b4[1024] = "abcdef";
+  char str_4_4[1024] = "abcDef";
+  ck_assert_int_gt(s21_memcmp(b4, str_4_4, n4), 0);
+
+#test memcmp_zero_chars
+// Тест на сравнение строк с нулевыми символами
+  size_t n5 = 8;
+  char b5[1024] = "a\0b\0c\0";
+  char b55[1024] = "a\0b\0c\0";
+  ck_assert_int_eq(s21_memcmp(b5, b55, n5), 0);
+

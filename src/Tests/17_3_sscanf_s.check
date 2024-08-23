@@ -1,0 +1,52 @@
+#suite s21_sscanf_s_suite
+
+#tcase case_s21_sscanf_s
+#test sscanf_string
+    char str[] = "Hello, World!";
+    char buffer[4096];
+    char expected[4096];
+    int result = s21_sscanf(str, "%s", buffer);
+    int original= sscanf(str, "%s", expected);
+    ck_assert_int_eq(result, original);
+    ck_assert_str_eq(buffer, expected);
+
+#test sscanf_string_with_width
+// граничивает количество символов
+    char str[] = "Hello, World!";
+    char buffer[4096];
+    char expected[4096];
+    s21_sscanf(str, "%6s", buffer);
+    sscanf(str, "%6s", expected);
+    ck_assert_str_eq(buffer, expected);
+
+#test sscanf_string_with_longer_width
+// превышающей длину строки ввода
+    char str[] = "Hello, World!";
+    char buffer[4096];
+    char expected[4096];
+    int result = s21_sscanf(str, "%20s", buffer);
+    int original = sscanf(str, "%20s", expected);
+    ck_assert_int_eq(result, original);
+    
+
+#test sscanf_string_with_supplied_buffer_length
+// меньше длины считываемой строки
+    char str[] = "Hello, World!";
+    char buffer[7]; 
+    int result = s21_sscanf(str, "%s", buffer);
+    int original = sscanf(str, "%s", buffer);
+    ck_assert_int_eq(result, original);
+    ck_assert_str_eq(buffer, "Hello,");
+
+#test sscanf_with_asterisk_flag
+    char str[] = "Hello, World!";
+    int n_buffer, n_original;
+    int result = s21_sscanf(str, "%*s%n", &n_buffer);
+    int original = sscanf(str, "%*s%n", &n_original);
+    ck_assert_int_eq(n_buffer, n_original);
+    ck_assert_int_eq(result, original);
+    ck_assert_int_eq(n_buffer, 6);
+
+
+
+

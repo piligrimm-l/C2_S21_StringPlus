@@ -1,0 +1,106 @@
+#suite s21_sscanf_percent_suite
+
+#tcase case_s21_sscanf_percent
+#test sscanf_percent
+    char str[] = "%%";
+    char format[] = "%%";
+    char buffer[4096] = {0};
+    int result = s21_sscanf(str, format, buffer);
+    char expected[4096] = {0};
+//    int original = 
+    sscanf(str, format, expected);
+//    printf("Result: %d\n", result);
+//    printf("Original: %d\n", original);
+//    printf("Buffer: %s\n", buffer);
+//    printf("Expected: %s\n", expected);
+    ck_assert_int_eq(result, 0); 
+    ck_assert_str_eq(buffer, expected);
+
+#test sscanf_multiple_percent
+    int a1, a2;
+    int b1 = 80, b2 = 33;
+    int c1 = 55, c2 = 33;
+    char str[] = "12%13%14";
+    char format[] = "%d%%%d%%%d";
+    int res1 = s21_sscanf(str, format, &a1, &b1, &c1);
+    int res2 = sscanf(str, format, &a2, &b2, &c2);
+
+//    printf("Result 1: %d, Result 2: %d\n", res1, res2);
+//    printf("a1: %d, a2: %d\n", a1, a2);
+//    printf("b1: %d, b2: %d\n", b1, b2);
+//    printf("c1: %d, c2: %d\n", c1, c2);
+
+    ck_assert_int_eq(res1, res2);
+    ck_assert_int_eq(a1, a2);
+    ck_assert_int_eq(b1, b2);
+    ck_assert_int_eq(c1, c2);
+
+
+#test sscanf_double_percent
+    char str[] = "%%%%";
+    char format[] = "%%%%%";
+    char buffer[4096] = {0};
+    int result = s21_sscanf(str, format, buffer);
+    char expected[4096] = {0};
+//    int original = 
+    sscanf(str, format, expected);
+//    printf("Result: %d\n", result);
+//    printf("Original: %d\n", original);
+//    printf("Buffer: %s\n", buffer);
+//    printf("Expected: %s\n", expected);
+    ck_assert_int_eq(result, 0);
+    ck_assert_str_eq(buffer, expected);
+
+#test sscanf_surrounding_characters
+//  игнорирует другие символы перед и после %%
+    char str[] = "abc%%def";
+    char format[] = "%%";
+    char buffer[4096] = {0};
+    int result = s21_sscanf(str, format, buffer);
+    char expected[4096] = {0};
+//    int original = 
+    sscanf(str, format, expected);
+//    printf("Result: %d\n", result);
+//    printf("Original: %d\n", original);
+//    printf("Buffer: %s\n", buffer);
+//    printf("Expected: %s\n", expected);
+    ck_assert_int_eq(result, 0);
+    ck_assert_str_eq(buffer, expected);
+
+#test sscanf_with_other_specifiers
+    char str[] = "12345 % 67890";
+    char format[] = "%d %% %d";
+    int value1, value2;
+    int result = s21_sscanf(str, format, &value1, &value2);
+    int expected_value1, expected_value2;
+//    int original = 
+    sscanf(str, format, &expected_value1, &expected_value2);
+//    printf("Result: %d\n", result);
+//    printf("Original: %d\n", original);
+//    printf("Value1: %d\n", value1);
+//    printf("Value2: %d\n", value2);
+//    printf("Expected value1: %d\n", expected_value1);
+//    printf("Expected value2: %d\n", expected_value2);
+    ck_assert_int_eq(result, 2);
+    ck_assert_int_eq(value1, expected_value1);
+    ck_assert_int_eq(value2, expected_value2);
+
+#test sscanf_percent_with_values
+    int a1 = 1234, a2 = 33333;
+    int b1 = 1234, b2 = 33333;
+    char str[] = "%%123%888";
+    char format[] = "%%%%%d%%%d";
+    int res1 = s21_sscanf(str, format, &a1, &b1);
+    int res2 = sscanf(str, format, &a2, &b2);
+
+//    printf("Result 1: %d, Result 2: %d\n", res1, res2);
+//    printf("a1: %d, a2: %d\n", a1, a2);
+//    printf("b1: %d, b2: %d\n", b1, b2);
+
+    ck_assert_int_eq(res1, res2);
+    ck_assert_int_eq(a1, a2);
+    ck_assert_int_eq(b1, b2);
+
+
+
+

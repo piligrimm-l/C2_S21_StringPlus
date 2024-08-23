@@ -1,0 +1,88 @@
+#suite s21_sprintf_u_suite
+
+#tcase case_s21_sprintf_u
+#test sprintf_unsigned
+// с положительным числом 
+    char buffer[4096];
+    char expected[4096];
+    unsigned int num = 12345;
+    sprintf(expected, "%u", num);
+    s21_sprintf(buffer, "%u", num);
+    ck_assert_str_eq(buffer, expected);
+
+#test sprintf_unsigned_max
+// с максимальным значением беззнакового целого:
+    char buffer[4096];
+    char expected[4096];
+    unsigned int num = UINT_MAX;
+    s21_sprintf(buffer, "%u", num);
+    sprintf(expected, "%u", num); 
+    ck_assert_str_eq(buffer, expected);
+
+#test sprintf_unsigned_zero
+    char buffer[4096];
+    char expected[4096];
+    unsigned int num = 0;
+    sprintf(expected, "%u", num); 
+    s21_sprintf(buffer, "%u", num);
+    ck_assert_str_eq(buffer, expected);
+
+    #test sprintf_unsigned_negative
+// с отрицательным числом
+    char buffer[4096];
+    char expected[4096];
+    int num = -12345;
+    sprintf(expected, "%u", (unsigned int)num);
+    s21_sprintf(buffer, "%u", (unsigned int)num);
+    ck_assert_str_eq(buffer, expected);
+
+/*
+test sprintf_unsigned_large
+// с большим числом, которое не помещается в тип unsigned int
+    char buffer[4096];
+    char expected[4096];
+    unsigned long long int num = ULLONG_MAX;
+    sprintf(expected, "%llu", num);
+    s21_sprintf(buffer, "%u", (unsigned int)num);
+    ck_assert_str_eq(buffer, expected);
+*/
+
+#test sprintf_unsigned_formatting
+// проверка форматирования вывода
+    char buffer[4096];
+    char expected[4096];
+    unsigned int num = 12345;
+    sprintf(expected, "%10u", num);
+    s21_sprintf(buffer, "%10u", num);
+    ck_assert_str_eq(buffer, expected);
+
+#test sprintf_unsigned_zero_padding
+// вывод нуля с заполнением
+    char buffer[4096];
+    char expected[4096];
+    unsigned int num = 0;
+    sprintf(expected, "%05u", num);
+    s21_sprintf(buffer, "%05u", num);
+    ck_assert_str_eq(buffer, expected);
+
+#test sprintf_u_h_flag
+    char buffer[4096];
+    char expected[4096];
+    unsigned short int value_hu = 5678;
+    unsigned short int value_huo = 5678;
+    int result_hu_s = s21_sprintf(buffer, "%hu", value_hu);
+    sprintf(expected, "%hu", value_huo);
+    ck_assert_int_eq(result_hu_s, strlen(expected));
+    ck_assert_str_eq(buffer, expected);
+
+#test sprintf_u_l_flag
+    char buffer[4096];
+    char expected[4096];
+    unsigned long value_lu = 1234567890UL; 
+    unsigned long value_luo = 1234567890UL;
+    int result_lu= s21_sprintf(buffer, "%lu", value_lu);
+    sprintf(expected, "%lu", value_luo);
+    ck_assert_int_eq(result_lu, strlen(expected));
+    ck_assert_str_eq(buffer, expected);
+
+

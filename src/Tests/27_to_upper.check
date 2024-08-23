@@ -1,0 +1,136 @@
+#suite s21_to_upper
+
+#tcase case_s21_to_upper
+#test to_upper_basic_lowercase_to_uppercase
+  char str1[] = "abc";
+  char *str2 = s21_to_upper(str1);
+  ck_assert_str_eq(str2, "ABC");
+
+#test to_upper_mixed_case_to_uppercase
+  char str1[] = "aBc";
+  char *str2 = s21_to_upper(str1);
+  ck_assert_str_eq(str2, "ABC");
+
+#test to_upper_end_lowercase_to_uppercase
+  char str1[] = "abC";
+  char *str2 = s21_to_upper(str1);
+  ck_assert_str_eq(str2, "ABC");
+
+#test to_upper_already_uppercase
+  char str1[] = "ABC";
+  char *str2 = s21_to_upper(str1);
+  ck_assert_str_eq(str2, "ABC");
+
+#test to_upper_numbers_unchanged
+  char str1[] = "123";
+  char *str2 = s21_to_upper(str1);
+  ck_assert_str_eq(str2, "123");
+
+#test to_upper_mixed_with_numbers
+  char str1[] = "123abc";
+  char *str2 = s21_to_upper(str1);
+  ck_assert_str_eq(str2, "123ABC");
+
+#test to_upper_mixed_repeated_case
+  char str1[] = "aBaBc";
+  char *str2 = s21_to_upper(str1);
+  ck_assert_str_eq(str2, "ABABC");
+
+#test to_upper_special_chars_unchanged
+// что специальные символы и знаки пунктуации остаются неизменными.
+  char str1[] = ".,/.,/.,";
+  char *str2 = s21_to_upper(str1);
+  ck_assert_str_eq(str2, ".,/.,/.,");
+
+#test to_upper_numbers_with_lowercase
+  char str1[] = "09876abc";
+  char *str2 = s21_to_upper(str1);
+  ck_assert_str_eq(str2, "09876ABC");
+
+#test to_upper_lowercase_with_numbers
+  char str1[] = "abc123";
+  char *str2 = s21_to_upper(str1);
+  ck_assert_str_eq(str2, "ABC123");
+
+#test to_upper_single_space_unchanged
+  char str1[] = " ";
+  char *str2 = s21_to_upper(str1);
+  ck_assert_str_eq(str2, " ");
+
+#test to_upper_empty_string
+  char str1[] = "";
+  char *str2 = s21_to_upper(str1);
+  ck_assert_str_eq(str2, "");
+
+#test to_upper_alphanumeric_mixed_case
+  char str1[] = "a1a1a1";
+  char *str2 = s21_to_upper(str1);
+  ck_assert_str_eq(str2, "A1A1A1");
+
+#test to_upper_space_start_alphanumeric
+  char str1[] = " a1a1a1";
+  char *str2 = s21_to_upper(str1);
+  ck_assert_str_eq(str2, " A1A1A1");
+
+#test to_upper_alphanumeric_space_end
+  char str1[] = "a1a1a1 ";
+  char *str2 = s21_to_upper(str1);
+  ck_assert_str_eq(str2, "A1A1A1 ");
+
+#test to_upper_start_uppercase_alphanumeric
+  char str1[] = "Aa1a1a1";
+  char *str2 = s21_to_upper(str1);
+  ck_assert_str_eq(str2, "AA1A1A1");
+
+#test to_upper_alphanumeric_end_uppercase
+  char str1[] = "a1a1a1A";
+  char *str2 = s21_to_upper(str1);
+  ck_assert_str_eq(str2, "A1A1A1A");
+
+#test to_upper_null_char_in_middle
+// символ \0 в середине.
+  char str1[] = "a1a1\0a1";
+  char *str2 = s21_to_upper(str1);
+  ck_assert_str_eq(str2, "A1A1\0A1");
+
+#test to_upper_newline_in_middle
+// строки с символом новой строки \n.
+  char str1[] = "a1a\n1a1";
+  char *str2 = s21_to_upper(str1);
+  ck_assert_str_eq(str2, "A1A\n1A1");
+
+#test to_upper_full_alphabet_lowercase
+  char str1[] = "abcdefghijklmnopqrstuvwxyz";
+  char *str2 = s21_to_upper(str1);
+  ck_assert_str_eq(str2, "ABCDEFGHIJKLMNOPQRSTUVWXYZ");
+
+#test to_upper_special_chars_mix
+  char str1[] = ")(*&^YTRYUIKJHWR<LR3.,tmwnrg.";
+  char *str2 = s21_to_upper(str1);
+  ck_assert_str_eq(str2, ")(*&^YTRYUIKJHWR<LR3.,TMWNRG.");
+
+#test to_upper_single_space_preserved
+  char str1[] = " ";
+  char *str2 = s21_to_upper(str1);
+  ck_assert_str_eq(str2, " ");
+
+#test to_upper_already_uppercase_confirmed
+  char str1[] = "ABC";
+  char *str2 = s21_to_upper(str1);
+  ck_assert_str_eq(str2, "ABC");
+
+#test to_upper_lower_case_with_symbols
+  char str1[] = "_az{";
+  char *str2 = s21_to_upper(str1);
+  ck_assert_str_eq(str2, "_AZ{");
+
+#test to_upper_long_mixed_case
+  char str1[] =
+      "SDFGHJKLPOIUYTREWQWERTYUIOP["
+      "OIUYTRFGHJKLJHBVNMASDFGHJKLPOIUYTREWQWERTYUIO";
+  char *str2 = s21_to_upper(str1);
+  ck_assert_str_eq(str2,
+                   "SDFGHJKLPOIUYTREWQWERTYUIOP["
+                   "OIUYTRFGHJKLJHBVNMASDFGHJKLPOIUYTREWQWERTYUIO");
+
+

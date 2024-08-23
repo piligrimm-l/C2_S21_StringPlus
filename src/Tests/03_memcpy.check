@@ -1,0 +1,42 @@
+#suite s21_memcpy_suite
+
+#tcase case_s21_memcpy
+#test memcpy_normal_string
+// Проверка копирования простой строки, включая '\0'
+  char src[] = "Test string";
+  char dest[20];
+  s21_memcpy(dest, src, strlen(src) + 1); 
+  ck_assert_str_eq(dest, src);
+
+#test memcpy_without_overlap
+// корректность копирования без учета перекрытия
+  char src[] = "Example text";
+  char dest[20];
+  s21_memcpy(dest, src, strlen(src) + 1); 
+  ck_assert_str_eq(dest, src);
+
+#test memcpy_zero_bytes
+// gри попытке скопировать 0 байтов содержимое целевой области памяти не изменяется
+  char src[] = "Non-empty";
+  char dest[20] = "Initial";
+  s21_memcpy(dest, src, 0);  
+  ck_assert_str_eq(dest, "Initial");
+
+#test memcpy_large_data
+// Тестирование функции с большим объемом данных
+  char src[1024];
+  char dest[1024];
+  // Инициализация src некоторыми данными
+  for (int i = 0; i < 1024; i++) {
+    src[i] = (char)(i % 256);
+  }
+  s21_memcpy(dest, src, sizeof(src));
+  ck_assert_mem_eq(dest, src, sizeof(src));
+
+#test memcpy_binary_data
+// функция способна корректно копировать бинарные данные, не интерпретируя их.
+  unsigned char src[] = {0xDE, 0xAD, 0xBE, 0xEF};
+  unsigned char dest[4];
+  s21_memcpy(dest, src, sizeof(src));
+  ck_assert_mem_eq(dest, src, sizeof(src));
+

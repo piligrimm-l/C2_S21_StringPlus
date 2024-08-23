@@ -1,0 +1,74 @@
+#suite s21_sprintf_other_suite
+
+#tcase case_s21_sprintf_other
+#test sprintf_int_and_string
+//  с целым числом и строкой
+    char buffer[4096];
+    char expected[4096];
+    int number = 123;
+    char *string = "test";
+    int result = s21_sprintf(buffer, "Number: %d, String: %s", number, string);
+    int original = sprintf(expected, "Number: %d, String: %s", number, string);
+    ck_assert_int_eq(result, original);
+    ck_assert_str_eq(buffer, expected);
+
+#test sprintf_int_and_float
+// с целым и числом с плавающей точкой
+    char buffer[4096], expected[4096];
+    int number = 10;
+    float number2 = 3.14;
+    sprintf(expected, "Int: %d, Float: %.2f", number, number2);
+    s21_sprintf(buffer, "Int: %d, Float: %.2f", number, number2);
+    ck_assert_str_eq(buffer, expected);
+
+#test sprintf_unsigned_and_char
+//  с беззнаковым целым и символом
+    char buffer[4096], expected[4096];
+    int number = 255;
+    char a = 'A';
+    sprintf(expected, "Unsigned: %u, Char: %c", number, a);
+    s21_sprintf(buffer, "Unsigned: %u, Char: %c", number, a);
+    ck_assert_str_eq(buffer, expected);
+
+#test sprintf_float_and_negative_int
+//  с числом с плавающей точкой и отрицательным целым числом
+    char buffer[4096];
+    char expected[4096];
+    sprintf(expected, "Float: %.3f, Negative Int: %d", 3.14159, -100);
+    s21_sprintf(buffer, "Float: %.3f, Negative Int: %d", 3.14159, -100);
+    ck_assert_str_eq(buffer, expected);
+
+#test sprintf_d_short_int
+// Максимальное значение для short int
+    char buffer[4096];
+    char expected[4096];
+    short int num = 32767; 
+    int original = sprintf(expected, "%hd", num);
+    int result = s21_sprintf(buffer, "%hd", num);
+    ck_assert_int_eq(result, original);
+    
+#test sprintf_d_long_int
+    char buffer[4096];
+    char expected[4096];
+    long int num = 2147483647L;
+    int original = sprintf(expected, "%ld", num);
+    int result = s21_sprintf(buffer, "%ld", num);
+    ck_assert_int_eq(result, original);
+
+#test sprintf_u_short_int
+    char buffer[4096];
+    char expected[4096];
+    unsigned short int num = 65535; 
+    int original = sprintf(expected, "%hu", num);
+    int result = s21_sprintf(buffer, "%hu", num);
+    ck_assert_int_eq(result, original);
+    
+#test sprintf_u_long_int
+    char buffer[4096];
+    char expected[4096];
+    unsigned long int num = 4294967295UL;
+    int original = sprintf(expected, "%lu", num);
+    int result = s21_sprintf(buffer, "%lu", num);
+    ck_assert_int_eq(result, original);
+
+

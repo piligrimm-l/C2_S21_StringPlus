@@ -1,0 +1,18 @@
+#suite s21_sprintf_c_suite
+
+#tcase case_s21_sprintf_c
+#test sprintf_c_simple_normal
+// Проверка вывода обычного символа
+    char buffer[4096], expected[4096];
+    char ch = 'A';
+    s21_sprintf(buffer, "%c", ch);
+    sprintf(expected, "%c", ch);
+    ck_assert_str_eq(buffer, expected); 
+
+#test sprintf_c_next_line
+    char buffer[10];
+    char ch = '\n';
+    s21_sprintf(buffer, "%c", ch);
+    ck_assert_str_eq(buffer, "\n");
+
+

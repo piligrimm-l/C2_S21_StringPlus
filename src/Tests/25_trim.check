@@ -1,0 +1,182 @@
+#suite s21_trim_suit
+
+#tcase case_s21_trim
+#test trim_remove_leading_chars
+  char str1[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+  char str2[] = "ABC";
+  char* str3 = (char*)s21_trim(str1, str2);
+  ck_assert_str_eq(str3, "DEFGHIJKLMNOPQRSTUVWXYZ");
+free(str3);
+
+#test trim_mixed_case_leading_and_trailing
+  char str1[] = "ABCDEFGHIabcABCPQRSTUVWXYZ";
+  char str2[] = "ABC";
+  char *str3 = s21_trim(str1, str2);
+  ck_assert_str_eq(str3, "DEFGHIabcABCPQRSTUVWXYZ");
+free(str3);
+
+#test trim_remove_leading_and_trailing_chars
+  char str1[] = "ABCDEFGHIabcABCPQRSTUVWXYZABC";
+  char str2[] = "ABC";
+  char *str3 = s21_trim(str1, str2);
+  ck_assert_str_eq(str3, "DEFGHIabcABCPQRSTUVWXYZ");
+free(str3);
+
+#test trim_no_chars_to_remove
+  char str1[] = "ABCDEFGHIabcABCPQRSTUVWXYZabc";
+  char str2[] = "ABC";
+  char *str3 = s21_trim(str1, str2);
+  ck_assert_str_eq(str3, "DEFGHIabcABCPQRSTUVWXYZabc");
+free(str3);
+
+#test trim_numbers_remain_with_char_removal
+  char str1[] = "ABCDEFGHIabcABCPQRSTUVWXYZabc";
+  char str2[] = "abc";
+  char *str3 = s21_trim(str1, str2);
+  ck_assert_str_eq(str3, "ABCDEFGHIabcABCPQRSTUVWXYZ");
+free(str3);
+
+#test trim_mixed_with_numbers
+  char str1[] = "abc123abc";
+  char str2[] = "abc";
+  char *str3 = s21_trim(str1, str2);
+  ck_assert_str_eq(str3, "123");
+free(str3);
+
+#test trim_repeated_patterns
+  char str1[] = "abc123abc456abc";
+  char str2[] = "abc";
+  char *str3 = s21_trim(str1, str2);
+  ck_assert_str_eq(str3, "123abc456");
+free(str3);
+
+#test trim_complex_pattern_with_numbers_and_letters
+  char str1[] = "a1bc123abc456a1bc";
+  char str2[] = "abc";
+  char *str3 = s21_trim(str1, str2);
+  ck_assert_str_eq(str3, "1bc123abc456a1");
+free(str3);
+
+#test trim_specific_chars_from_mixed_content
+  char str1[] = "a1bc123abc456a1bc";
+  char str2[] = "a1bc";
+  char *str3 = s21_trim(str1, str2);
+  ck_assert_str_eq(str3, "23abc456");
+free(str3);
+
+#test trim_selected_chars_complex_case
+  char str1[] = "abc123abc456a1bc";
+  char str2[] = "ab2c";
+  char *str3 = s21_trim(str1, str2);
+  ck_assert_str_eq(str3, "123abc456a1");
+free(str3);
+
+#test trim_selective_chars_from_mixed_conten
+  char str1[] = "abc123abc456a1bc";
+  char str2[] = "ab12c";
+  char *str3 = s21_trim(str1, str2);
+  ck_assert_str_eq(str3, "3abc456");
+free(str3);
+
+#test trim_case_insensitive_with_numbers_and_letters
+  char str1[] = "abAc123abc456aB1bc";
+  char str2[] = "ab12c";
+  char *str3 = s21_trim(str1, str2);
+  ck_assert_str_eq(str3, "Ac123abc456aB");
+free(str3);
+
+#test trim_case_sensitive_different_order
+  char str1[] = "abAc123abc456aB1bc";
+  char str2[] = "aBb12c";
+  char *str3 = s21_trim(str1, str2);
+  ck_assert_str_eq(str3, "Ac123abc456");
+free(str3);
+
+#test trim_long_string_with_specific_pattern
+  char str1[] = "11222333444aaaBaabaA53332244445677Babab7878998";
+  char str2[] = "aBbA12c";
+  char *str3 = s21_trim(str1, str2);
+  ck_assert_str_eq(str3, "333444aaaBaabaA53332244445677Babab7878998");
+free(str3);
+
+#test trim_long_string_complex_pattern
+  char str1[] = "11222333444aaaBaabaA53332244445677Babab7878998";
+  char str2[] = "4aB3bA12c";
+  char *str3 = s21_trim(str1, str2);
+  ck_assert_str_eq(str3, "53332244445677Babab7878998");
+free(str3);
+
+#test trim_long_string_specific_chars_end
+  char str1[] = "11222333444aaaBaabaA53332244445677Babab7878998";
+  char str2[] = "4aB37bA897c";
+  char *str3 = s21_trim(str1, str2);
+  ck_assert_str_eq(str3, "11222333444aaaBaabaA533322444456");
+free(str3);
+
+#test trim_long_string_complex_chars_start_and_end
+  char str1[] = "11222333444aaaBaabaA53332244445677Babab7878998";
+  char str2[] = "4223aB437bA189117c";
+  char *str3 = s21_trim(str1, str2);
+  ck_assert_str_eq(str3, "533322444456");
+free(str3);
+
+// valgrind
+#test trim_no_effect_with_unmatched_chars
+   char str1[] = "11222333444aaaBaabaA53332244445677Babab7878998";
+   char str2[] = "123456789aAbB";
+   char *str3 = s21_trim(str1, str2);
+   ck_assert_str_eq(str3, "");
+   free(str3);
+
+#test trim_empty_string_with_chars
+  char str1[] = "11222333444aaaBaabaA53332244445677Babab7878998";
+  char str2[] = "jK";
+  char *str3 = s21_trim(str1, str2);
+  ck_assert_str_eq(str3, "11222333444aaaBaabaA53332244445677Babab7878998");
+free(str3);
+
+// valgrind
+#test trim_empty_string_with_unrelated_chars
+char str1[] = "";
+char str2[] = "jK";
+char *str3 = s21_trim(str1, str2);
+ck_assert_str_eq(str3, "");
+free(str3);
+
+#test trim_non_alphanumeric_chars
+  char str1[] = "sdfghjk";
+  char str2[] = " ";
+  char *str3 = s21_trim(str1, str2);
+  ck_assert_str_eq(str3, "sdfghjk");
+free(str3);
+
+#test trim_no_chars_to_trim
+  char str1[] = "sdfg hjk";
+  char str2[] = " ";
+  char *str3 = s21_trim(str1, str2);
+  ck_assert_str_eq(str3, "sdfg hjk");
+free(str3);
+
+// valgrind
+#test trim_space_only
+  char str1[] = " ";
+  char str2[] = " ";
+  char *str3 = s21_trim(str1, str2);
+  ck_assert_str_eq(str3, "");
+  free(str3);
+
+#test trim_complex_pattern
+  char str1[] = "a231546yutiljkhgtyre565786oiu;jlkhb12";
+  char str2[] = "12333333333333333333333333333333333ab";
+  char *str3 = s21_trim(str1, str2);
+  ck_assert_str_eq(str3, "546yutiljkhgtyre565786oiu;jlkh");
+free(str3);
+
+#test trim_very_complex_pattern
+  char str1[] = "a231546yutiljkhgtyre565786oiu;jlkhb12";
+  char str2[] = "12333333333333333333333333333333333abmmmmmm";
+  char *str3 = s21_trim(str1, str2);
+  ck_assert_str_eq(str3, "546yutiljkhgtyre565786oiu;jlkh");
+free(str3);
+
+

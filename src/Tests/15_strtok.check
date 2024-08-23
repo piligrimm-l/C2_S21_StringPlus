@@ -1,0 +1,56 @@
+#suite s21_strtok_suite
+
+#tcase case_s21_strtok
+#test strtok_basic
+// Базовый тест на разделение строки
+  char str[] = "This,is a.test";
+  const char delim[] = ", .";
+  char *token = s21_strtok(str, delim);
+  ck_assert_str_eq(token, "This");
+  token = s21_strtok(NULL, delim);
+  ck_assert_str_eq(token, "is");
+  token = s21_strtok(NULL, delim);
+  ck_assert_str_eq(token, "a");
+  token = s21_strtok(NULL, delim);
+  ck_assert_str_eq(token, "test");
+  token = s21_strtok(NULL, delim);
+  ck_assert_ptr_null(token);
+
+
+#test strtok_no_delimiters
+// Тест на разделение строки без разделителей
+  char str[] = "NoDelimitersHere";
+  const char delim[] = ", .";
+  char *token = s21_strtok(str, delim);
+  ck_assert_str_eq(token, "NoDelimitersHere");
+  token = s21_strtok(NULL, delim);
+  ck_assert_ptr_null(token);
+
+#test strtok_empty_string
+// Тест на разделение пустой строки
+  char str[] = "";
+  const char delim[] = ", .";
+  char *token = s21_strtok(str, delim);
+  ck_assert_ptr_null(token);
+
+#test strtok_empty_delimiters
+// Тест на разделение строки с пустым набором разделителей
+  char str[] = "Normal string";
+  const char delim[] = "";
+  char *token = s21_strtok(str, delim);
+  ck_assert_str_eq(token, "Normal string");
+  token = s21_strtok(NULL, delim);
+  ck_assert_ptr_null(token);
+
+#test strtok_consecutive_delimiters
+// Тест на разделение строки с подряд идущими разделителями
+  char str[] = "Consecutive,,,delimiters";
+  const char delim[] = ",";
+  char *token = s21_strtok(str, delim);
+  ck_assert_str_eq(token, "Consecutive");
+  token = s21_strtok(NULL, delim);
+  ck_assert_str_eq(token, "delimiters");
+  token = s21_strtok(NULL, delim);
+  ck_assert_ptr_null(token);
+
+

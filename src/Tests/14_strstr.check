@@ -1,0 +1,53 @@
+#suite s21_strstr_suite
+
+#tcase case_s21_strstr
+#test strstr_normal
+// Тест на поиск подстроки внутри строки
+  char *haystack = "The quick brown fox jumps over the lazy dog";
+  char *needle = "brown";
+//  printf("------------------%s\n ---------------%s\n", s21_strstr(haystack, needle), strstr(haystack, needle));
+  ck_assert_ptr_eq(s21_strstr(haystack, needle), strstr(haystack, needle));
+
+#test strstr_not_found
+// Тест на отсутствие подстроки
+  char *haystack = "Simple string for testing";
+  char *needle = "not";
+  ck_assert_ptr_eq(s21_strstr(haystack, needle), strstr(haystack, needle));
+
+#test strstr_empty_needle
+// Тест на пустую подстроку
+  char *haystack = "Non-empty string";
+//  printf("------------------%s\n ---------------%s\n", s21_strstr(haystack, ""), strstr(haystack, ""));
+  ck_assert_ptr_eq(s21_strstr(haystack, ""), strstr(haystack, ""));
+  
+  // Сравниваем с началом haystack
+
+#test strstr_all_empty
+// Тест на полностью пустые строки
+//  printf("------------------%s\n ---------------%s\n", s21_strstr("", ""), strstr("", ""));
+  ck_assert_ptr_eq(s21_strstr("", ""), "");
+  // Ожидаем указатель на начало haystack
+
+#test strstr_partial_match
+// Тест на частично совпадающую подстроку
+  char const *haystack = "Partial match test";
+  char const *needle = "testy";
+  char const *result = s21_strstr(haystack, needle);
+  char const *expected = strstr(haystack, needle);
+//  printf("------------------%s\n ---------------%s\n", s21_strstr(haystack, needle), strstr(haystack, needle));
+  if (result != expected) {
+        printf("Ошибка: ожидаемый результат '%s', полученный результат '%s'\n", expected, result);
+    }
+  ck_assert_msg(result == expected, "Частично совпадающая подстрока не найдена корректно");
+  ck_assert_ptr_eq(s21_strstr(haystack, needle), strstr(haystack, needle));
+
+#test strstr_empty_haystack_nonempty_needle
+// Тест на поиск подстроки в пустой строке
+  char *haystack = "";
+  char *needle = "any";
+//  printf("------------------%s\n ---------------%s\n", s21_strstr(haystack, needle), strstr(haystack, needle));
+  char *result = s21_strstr(haystack, needle);
+  ck_assert_ptr_null(result);
+
+
+

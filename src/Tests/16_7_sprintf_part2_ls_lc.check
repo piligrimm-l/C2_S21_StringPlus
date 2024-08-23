@@ -1,0 +1,19 @@
+#suite s21_sprintf_lc_ls
+
+#tcase case_s21_sprintf_lc_ls
+#test sprintf_wide_string
+    wchar_t wide_str[] = L"Hello, world";
+    char buffer[4096];
+    char expected[4096];
+    sprintf(expected, "Wide String: %ls", wide_str);
+    s21_sprintf(buffer, "Wide String: %ls", wide_str);
+    ck_assert_str_eq(buffer, expected);
+
+#test sprintf_wide_char
+    wchar_t wide_char = L'X';
+    char buffer[4096];
+    char expected[4096];
+    sprintf(expected, "Wide Character: %lc", wide_char);
+    s21_sprintf(buffer, "Wide Character: %lc", wide_char);
+    ck_assert_str_eq(buffer, expected);
+

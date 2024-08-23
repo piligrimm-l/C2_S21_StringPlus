@@ -1,0 +1,94 @@
+#suite s21_strerror_suite
+
+#tcase case_s21_strerror
+#test  strerror_known_error
+// Известный код ошибки
+  int err = EUSERS;
+  char *result = s21_strerror(err);
+  char *expected_msg = strerror(err);
+  printf("s21_strerror(EUSERS) = %s = %s\n", result, expected_msg);
+  ck_assert_str_eq(s21_strerror(err), expected_msg);
+
+#test  strerror_known_error_EPROTO
+  int err = EPROTO;
+  char *result = s21_strerror(err);
+  char *expected_msg = strerror(err);
+  printf("s21_strerror(EPROTO) = %s = %s\n", result, expected_msg);
+  ck_assert_str_eq(s21_strerror(err), expected_msg);
+
+#test strerror_unknown_error
+// Неизвестный код ошибки
+  int err = -1; 
+  char *result = s21_strerror(err);
+  char *expected_msg = strerror(err);
+  printf("s21_strerror(-1) = %s = %s\n", result, expected_msg);
+  ck_assert_str_eq(s21_strerror(err), expected_msg);
+
+#test strerror_boundary_conditions
+  // Проверяем, что функция возвращает валидное сообщение об ошибке
+  char *min_error_msg = s21_strerror(INT_MIN);
+  char *max_error_msg = s21_strerror(INT_MAX);
+  ck_assert(min_error_msg != NULL);
+  ck_assert(max_error_msg != NULL);
+  // Проверяем, что сообщения об ошибках не указывают на неизвестную ошибку
+  ck_assert_str_ne(min_error_msg, "Unknown error");
+  ck_assert_str_ne(max_error_msg, "Unknown error");
+  
+#test strerror_no_error
+// Код ошибки, означающий "нет ошибки"
+  int err = 0; 
+  s21_strerror(err);
+  char *expected_msg;
+  #if defined(__linux__)
+  expected_msg = "Success"; 
+  #elif defined(__APPLE__)
+  expected_msg = "Undefined error: 0"; 
+  #elif defined(_WIN32)
+  expected_msg = "The operation completed successfully.";
+  #else
+  expected_msg = "Unknown system error"; 
+  #endif
+  ck_assert_str_eq(s21_strerror(err), expected_msg);
+
+
+#test minus_two
+  int err = -2;
+  char *error_msg = s21_strerror(err);
+  char *result = strerror(err);
+  printf("Error message for code -2: %s = %s\n", error_msg, result);
+  ck_assert(error_msg != NULL);
+
+#test much
+  int err = 108;
+  char *error_msg = s21_strerror(err);
+  char *result = strerror(err);
+  printf("s21_strerror(108): %s = %s\n", error_msg, result);
+  ck_assert(error_msg != NULL);
+
+#tcase case_s21_strerror_admiralm
+#test s21_strerror_test_1
+  int errcode = 11;
+  char *res1 = s21_strerror(errcode);
+  char *res2 = strerror(errcode);
+// printf("s21_strerror(11) = %s = %s\n", res1, res2);
+  ck_assert_str_eq(res1, res2);
+
+#test s21_strerror_test_2
+  int errcode = 200;
+  char *res1 = s21_strerror(errcode);
+  char *res2 = strerror(errcode);
+//  printf("s21_strerror(200) = %s = %s\n", res1, res2);
+  ck_assert_str_eq(res1, res2);
+
+#tcase case_s21_strerror_all
+#test compare_strerror_outputs
+    for (int err = 0; err <= 136; err++) {
+        const char *expected = strerror(err);
+        const char *result = s21_strerror(err);
+//        printf("Error code %d: expected \"%s\", got \"%s\"\n", err, expected, result);
+        ck_assert_msg(strcmp(expected, result) == 0, "Mismatch for error %d: expected \"%s\", got \"%s\"", err, expected, result);
+    }
+
+    
+
+

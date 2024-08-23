@@ -1,0 +1,29 @@
+#suite s21_strrchr_suite
+
+#tcase case_s21_strrchr
+#test strrchr_last_occurrence
+// возвращает правильный указатель на последний такой символ
+  const char *str = "find the last occurrence of character";
+  ck_assert_ptr_eq(s21_strrchr(str, 'c'), strrchr(str, 'c'));
+
+#test strrchr_not_present
+// возвращает NULL, если символ отсутствует в строке, корректности обработки несуществующих символов
+  const char *str = "no such character here";
+  ck_assert_ptr_eq(s21_strrchr(str, 'z'), NULL);
+
+#test strrchr_null_char
+// поиск \0 и возвращает указатель на конец строки
+  const char *str = "searching for the end";
+//  printf("-------------------%s\n---------------%s\n", s21_strrchr(str, '\0'), strrchr(str, '\0'));
+  ck_assert_ptr_eq(s21_strrchr(str, '\0'), strrchr(str, '\0'));
+
+#test strrchr_empty_string
+// возвращается NULL, так как в пустой строке не может быть найден ни один символ
+  const char *str = "";
+  ck_assert_ptr_eq(s21_strrchr(str, 'a'), NULL);
+
+#test strrchr_only_char
+// строку, состоящую из повторяющихся символов, возвращает указатель на последний символ в такой строке.
+  const char *str = "aaaa";
+  ck_assert_ptr_eq(s21_strrchr(str, 'a'), strrchr(str, 'a'));
+

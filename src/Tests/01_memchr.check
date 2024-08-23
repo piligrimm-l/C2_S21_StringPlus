@@ -1,0 +1,33 @@
+#suite s21_memchr_suite
+
+#tcase case_s21_memchr
+#test memchr_found
+// функция правильно находит символ в строке и возвращает ожидаемый результат.
+  const char str[] = "Hello, world!";
+  int c = 'w';
+  ck_assert_ptr_eq(s21_memchr(str, c, s21_strlen(str)), memchr(str, c, strlen(str)));
+
+#test memchr_not_found
+// обрабатывает случаи, когда символ не может быть найден в пределах указанного количества символов.
+  const char str[] = "Hello, world!";
+  int c = 'x';
+  ck_assert_ptr_eq(s21_memchr(str, c, s21_strlen(str)), memchr(str, c, strlen(str)));
+
+#test memchr_zero_length
+// ожидая возврат NULL, поскольку поиск не должен производиться в пустом диапазоне. 
+  const char str[] = "Hello, world!";
+  int c = 'H';
+  ck_assert_ptr_eq(s21_memchr(str, c, 0), memchr(str, c, 0));
+
+#test memchr_first_char
+// функция возвращает указатель на начало строки, если искомый символ является первым символом в строке
+  const char str[] = "Hello, world!";
+  int c = 'H';
+  ck_assert_ptr_eq(s21_memchr(str, c, s21_strlen(str)), memchr(str, c, strlen(str)));
+
+#test memchr_last_char
+// функция корректно возвращает указатель на последний символ в строке
+  const char str[] = "Hello, world!";
+  int c = '!';
+  ck_assert_ptr_eq(s21_memchr(str, c, s21_strlen(str)), memchr(str, c, strlen(str)));
+
